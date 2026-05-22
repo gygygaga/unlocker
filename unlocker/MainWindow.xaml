@@ -92,6 +92,5 @@
         <ui:TextBox Name="logger" HorizontalAlignment="Center" Margin="0,199,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="624" Height="190"/>
         <Button Content="Open Files" HorizontalAlignment="Left" Margin="591,114,0,0" VerticalAlignment="Top" Height="36" Width="121" BorderBrush="{x:Null}" Click="Button_Click1" FontWeight="SemiBold" FontFamily="Sitka Small"/>
 
-
     </Grid>
 </Window>

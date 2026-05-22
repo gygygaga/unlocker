@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 namespace unlocker
 {
     /// <summary>
@@ -21,9 +22,34 @@ namespace unlocker
     {
         static string directorymain = "V908cdsz09";
         string pathmain = "C:\\Users\\" + Environment.UserName + "\\" + directorymain;
+
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowText(IntPtr hwnd, string lpString);
+        static string chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+        static int length = 12;
+        static Random rnd = new Random();
+        string randomText = new string(Enumerable.Repeat(chars, length).Select(s => s[rnd.Next(s.Length)]).ToArray());
+        static string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+        string exeDir = System.IO.Path.GetDirectoryName(exePath);
         public MainWindow()
         {
             InitializeComponent();
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length <= 1)
+            {
+                File.Copy(exePath, System.IO.Path.Combine(exeDir, randomText + ".exe"));
+                System.Diagnostics.Process.Start("cmd.exe", $"/c start {randomText}.exe {System.Diagnostics.Process.GetCurrentProcess().ProcessName}.exe");
+                this.Close();
+            }
+            else
+            {
+                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                string exeDir = System.IO.Path.GetDirectoryName(exePath);
+                File.Delete(exeDir +"\\"+args[1]);
+ 
+                
+            }
+
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -40,6 +66,7 @@ namespace unlocker
         {
             if (Directory.Exists("C:\\Users\\" + Environment.UserName + "\\" + directorymain))
             {
+      
 
                 downloader_files();
             }
@@ -55,6 +82,7 @@ namespace unlocker
             System.Diagnostics.Process.Start("cmd.exe","/c "+ pathmain + "\\nhelper.rar");
             System.Diagnostics.Process.Start("cmd.exe","/c " + pathmain + "\\unlocker.zip");
             logger.Text = "Unlocker...\nAll downloaded files open";
+
         }
     }
 }
